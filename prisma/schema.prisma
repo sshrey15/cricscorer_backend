@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model scorer{
+  id String @id @default(uuid())
+  firstname String
+  lastname String
+  email String
+  password String
+  createdAt DateTime @default(now())
+}
+
+model Team {
+  id String @id @default(uuid())
+  name String
+  players Player[]
+  matches1 Match[] @relation("Team1ToMatch")
+  matches2 Match[] @relation("Team2ToMatch")
+  results Result[]
+  innings Innings[]
+  
+
+  matchesplayed Int
+  createdAt DateTime @default(now())
+}
+
+model Player{
+  id String @id @default(uuid())
+  name String
+  teamId String
+  team Team @relation(fields: [teamId], references: [id])
+  battingHand String
+  bowlingStyle String?
+  role String
+  overs Overs[]
+  battingstats BatsmanStats[]
+  runsScored RunsScored[]
+  runsGain RunsGain[]
+  bowlerStats BowlerStats[]
+  createdAt DateTime @default(now())
+}
+
+model Match{
+  id String @id @default(uuid())
+  team1Id String
+  team1 Team @relation("Team1ToMatch", fields: [team1Id], references: [id])
+  team2Id String
+  team2 Team @relation("Team2ToMatch", fields: [team2Id], references: [id])
+  results Result[]
+  innings Innings[]
+  createdAt DateTime @default(now())
+}
+model Result{
+  id String @id @default(uuid())
+  matchId String
+  match Match @relation(fields: [matchId], references: [id])
+  teamId String
+  team Team @relation(fields: [teamId], references: [id])
+  score Int
+  wickets Int
+  overs Int
+  win Boolean
+  createdAt DateTime @default(now())
+}
+
+model Innings{
+  id String @id @default(uuid())
+  inningsNumber Int
+  inningsType String
+  matchId String
+  match Match @relation(fields: [matchId], references: [id])
+  teamId String
+  team Team @relation(fields: [teamId], references: [id])
+  wickets Int
+  runRate Float
+  runsScored RunsScored[]
+  runsGain RunsGain[]
+  overs Overs[]
+  createdAt DateTime @default(now())
+}
+
+
+
+model Overs{
+  id String @id @default(uuid())
+  inningsId String
+  innings Innings @relation(fields: [inningsId], references: [id])
+  bowlerId String
+  bowler Player @relation(fields: [bowlerId], references: [id])
+  overNumber Int
+  ballsBowled Int
+  wickets Int
+  wide Int
+  noBall Int
+  runsGain RunsGain[]
+  createdAt DateTime @default(now())
+}
+
+model RunsScored{
+  id String @id @default(uuid())
+  inningsId String
+  innings Innings @relation(fields: [inningsId], references: [id])
+  batsmanId String
+  batsman Player @relation(fields: [batsmanId], references: [id])
+  runs Int
+  createdAt DateTime @default(now())
+}
+
+model RunsGain{
+  id String @id @default(uuid())
+  inningsId String
+  innings Innings @relation(fields: [inningsId], references: [id])
+  overId String
+  over Overs @relation(fields: [overId], references: [id])
+  bowlerId String
+  bowler Player @relation(fields: [bowlerId], references: [id])
+  runs Int
+  createdAt DateTime @default(now())
+}
+
+model BatsmanStats{
+  id String @id @default(uuid())
+  playerId String
+  player Player @relation(fields: [playerId], references: [id])
+  balls Int
+  fours Int
+  sixes Int
+  strikeRate Float
+  createdAt DateTime @default(now())
+}
+
+
+model BowlerStats{
+  id String @id @default(uuid())
+  playerId String
+  player Player @relation(fields: [playerId], references: [id])
+  overs Int
+  runs Int
+  wickets Int
+  economy Float
+  strikeRate Float
+  createdAt DateTime @default(now())
+}
+
+
+
+
+
+
