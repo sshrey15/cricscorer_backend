@@ -3,51 +3,29 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function post_innings(res,req){
-    const {matchId,inningsNumber, inningsType, teamId} = req.body;
-    const innings = await prisma.innings.create({
-        data:{
-            matchId: matchId,
-            inningsNumber: inningsNumber,
-            inningsType: inningsType,
-            teamId: teamId
-        }
-    })
-    return res.send(200).json({innings});
-}
+// controllers/Innings.js
+export async function createInnings(req, res, next) {
+  console.log("createInnings function called");
+  console.log("Request body: ", req.body);
 
-export async  function get_innings(req,res){
-    const innings = await prisma.innings.findMany();
-    return res.status(200).json({innings});
-}
+ 
+  try {
+    const { inningsNumber, inningsType, teamid_tosswon } = req.body;
+    const cookie = req.cookies.matchCookie;
+    console.log("cookie_data: ", cookie);
+  
+    if (!inningsNumber || !inningsType) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
 
-export async function get_innings_by_matchId(req,res){
-    const {matchId} = req.params;
-    const innings = await prisma.innings.findMany({
-        where:{
-            matchId: parseInt(matchId)
-        }
-    })
-    return res.status(200).json({innings});
-}
+    
+  
 
-export async function get_innings_by_teamId(req,res){
-    const {teamId} = req.params;
-    const innings = await prisma.innings.findMany({
-        where:{
-            teamId: parseInt(teamId)
-        }
-    })
-    return res.status(200).json({innings});
-}
 
-export async function get_innings_by_matchId_and_teamId(req,res){
-    const {matchId,teamId} = req.params;
-    const innings = await prisma.innings.findMany({
-        where:{
-            matchId: parseInt(matchId),
-            teamId: parseInt(teamId)
-        }
-    })
-    return res.status(200).json({innings});
+    // Your logic to create innings
+    return res.status(201).json({ message: "Innings created successfully" });
+  } catch (error) {
+    console.error("Error creating innings: ", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 }

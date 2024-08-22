@@ -1,6 +1,10 @@
 import {Router} from 'express';
+import { createInnings } from '../controllers/Innings.js';
 
 const router = Router();
 
-router.route('/innings').post().get()
-router.route('innings/:matchId').get()
+router.route('/create_innings').post(createInnings);
+
+
+
+export default router;
