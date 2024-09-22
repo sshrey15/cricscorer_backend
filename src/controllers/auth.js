@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import jwt from "jsonwebtoken";
+import { response } from "express";
 
 const prisma = new PrismaClient();
 
@@ -123,6 +124,7 @@ export async function createScorer(req, res) {
     console.log("req.body: ", req.body);
     if (!validator.isEmail(email)) {
       return res.status(400).json({ error: "Invalid email" });
+      console.log("email is invalid");
     } else {
       console.log("email is valid");
     }
@@ -173,19 +175,22 @@ export async function loginScorer(req, res) {
   try {
     const { email, password } = req.body;
     console.log("data inside scorer_login: ", email, password);
+
     if (!email) {
       return res.status(400).json({ error: "email id requierd" });
+      console.log("email is required");
     }
 
     const existingScorer = await prisma.scorer.findUnique({
       where: { email },
     });
 
-    console.log("existingScorer: ", existingScorer);
-
+    
     if (!existingScorer) {
       return res.status(400).json({ error: "Scorer not found" });
     }
+
+    console.log("existingScorer: ", existingScorer);
 
     const passwordisValid = await bcrypt.compare(
       password,
@@ -198,7 +203,7 @@ export async function loginScorer(req, res) {
     console.log("before_token");
     try {
       if (!process.env.JWT_SECRET) {
-        throw new error("JWT_SECRET not found");
+        throw new Error("JWT_SECRET not found");
       }
       const token = jwt.sign(
         {
@@ -220,15 +225,20 @@ export async function loginScorer(req, res) {
         maxAge: 86400000,
         path: "/",
       });
+      ;
+
       const response = res.status(200).json({ token });
-      console.log("response: ", response);
+      
+      
     } catch (err) {
       return res.status(500).json({ error: "something went  wrong" });
     }
 
-    // console.log("scorer_token: ", token)
-
+    
     return response;
+
+
+  
   } catch (err) {
     return res.status(500).json({ error: "something went wrong" });
   }
