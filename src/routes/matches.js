@@ -9,7 +9,7 @@ const router = Router();
 router.route('/teams').post(addTeams).get(getTeams);
 router.route('/join_team').post(join_team)
 router.route('/create_match').post(createMatch);
-router.route('/team').get(get_team);
+router.route('/team').post(get_team);
 
 
 export default router;
