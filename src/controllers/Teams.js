@@ -41,7 +41,9 @@ export async function addTeams(req, res, next) {
 
                 name: name,
                 roomId: roomId,
-                roompassword: roompassword
+                roompassword: roompassword,
+                
+                
 
             }
         });
@@ -60,12 +62,41 @@ export async function getTeams(req, res, next){
                 id: true,
                 name: true,
                 roomId: true,
-                roompassword: true
-            }
+                roompassword: true,
+                
+            },
+            include: {
+                players: true, // This line includes the related players
+            },
             
         })
         return res.status(200).json({ teams });
     } catch (err) {
         next(err);
+    }
+}
+
+export async function getTeamById(req, res, next) {
+    try {
+        const { id } = req.params;
+        const team = await prisma.team.findUnique({
+            where: {
+                id: id,
+            },
+            select:{
+                id: true,
+                name: true,
+               
+            }
+        });
+
+        if (!team) {
+            return res.status(404).json({ error: 'Team not found' });
+        }
+
+        return res.status(200).json({ team });
+    } catch (err) {
+        console.error('Error fetching team:', err);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 }

@@ -62,6 +62,7 @@ export async function createInnings(req, res, next) {
       message: "Innings created successfully",
       innings: innings,
       scoreCard: scoreCard,
+      inningsCookie: inningsCookie,
     });
   } catch (error) {
     console.error("Error creating innings: ", error);
