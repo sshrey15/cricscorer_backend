@@ -9,7 +9,7 @@ export async function createInnings(req, res, next) {
   console.log("Request body: ", req.body);
 
   try {
-    const { inningsNumber, inningsType, teamid_tosswon } = req.body;
+    const {  inningsType, teamid_tosswon } = req.body;
     const cookie = req.cookies.matchCookie;
     console.log("cookie_data: ", cookie);
 
@@ -18,7 +18,15 @@ export async function createInnings(req, res, next) {
       return res.status(400).json({error: "Match not created"});
     }
 
+    let inningsNumber;
 
+    if(inningsType === "Batting || batting  || Bat || BAT"){
+      inningsNumber = 1;
+    }else if(inningsType === "Bowling || bowling || Bowl || BOWL"){
+      inningsNumber = 2;
+    }else{
+      return res.status(400).json({error: "Invalid innings type"});
+    }
 
     const innings = await prisma.innings.create({
       data:{
