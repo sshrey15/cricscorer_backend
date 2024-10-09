@@ -13,7 +13,22 @@ export async function delete_all(req, res, next){
         next(err);
         return res.status(500).json({error: err});
     }
-        
+}
+
+export async function get_team(req,res,next){
+    try{
+        const {roomId} = req.body;
+        const team = await prisma.team.findUnique({
+            where:{
+                roomId: roomId
+            }
+        })
+        return res.status(200).json({team})
+
+    }catch(err){
+        next(err);
+        return res.status(500).json({error: err});
+    }
 }
 
 
