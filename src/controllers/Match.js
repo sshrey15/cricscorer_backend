@@ -9,9 +9,6 @@ export async function createMatch(req, res,next) {
   const { team1RoomId, team1Password, team2RoomId, team2Password } = req.body;
   console.log("Request body: ", req.body);
 
-  if (req.cookies.matchCookie) {
-    return res.status(400).json({ error: "Match already created" });
-  }
 
   if (!team1RoomId || !team1Password || !team2RoomId || !team2Password) {
     return res.status(400).json({ error: "All fields are required" });
@@ -24,6 +21,7 @@ export async function createMatch(req, res,next) {
       },
     });
     if (!team1 || team1.roompassword !== team1Password) {
+      console.log("Team1 not found with roomID: ", team1RoomId);  
       return res.status(400).json({ error: "Invalid team1 credentials" });
     }
     const team2 = await prisma.team.findUnique({

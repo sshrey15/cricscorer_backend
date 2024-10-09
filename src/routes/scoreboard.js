@@ -1,4 +1,5 @@
 import {Router} from 'express';
+import { patch_scorecard } from '../controllers/Scorecard.js';
 
 
 const router = Router();
@@ -7,12 +8,10 @@ const router = Router();
 
 
 
-router.route('/scoreboard').post().get()
-router.route('/scoreboard/:inningsId').get()
-router.route('/scoreboard/').put()
+router.route('/scorecard').patch(patch_scorecard);
+
 
 
 export default router;
-
 
 

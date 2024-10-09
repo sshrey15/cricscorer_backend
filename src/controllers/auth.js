@@ -185,7 +185,6 @@ export async function loginScorer(req, res) {
       where: { email },
     });
 
-    
     if (!existingScorer) {
       return res.status(400).json({ error: "Scorer not found" });
     }
@@ -215,6 +214,7 @@ export async function loginScorer(req, res) {
           expiresIn: "1d",
         }
       );
+      
 
       console.log("scorer_token: ", token);
 
@@ -225,20 +225,12 @@ export async function loginScorer(req, res) {
         maxAge: 86400000,
         path: "/",
       });
-      ;
-
       const response = res.status(200).json({ token });
-      
-      
     } catch (err) {
       return res.status(500).json({ error: "something went  wrong" });
     }
 
-    
     return response;
-
-
-  
   } catch (err) {
     return res.status(500).json({ error: "something went wrong" });
   }
