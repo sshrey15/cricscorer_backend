@@ -13,6 +13,7 @@ router.route('/create_match').post(createMatch);
 router.route('/matches').get(getAllMatches)
 router.route('/team').post(get_team);
 router.route('/team/:id').get(getTeamById)
+
 router.route('/result').post(create_result)
 
 
