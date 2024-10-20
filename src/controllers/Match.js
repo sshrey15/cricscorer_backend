@@ -58,3 +58,13 @@ export async function createMatch(req, res,next) {
     return res.status(500).json({ error: "Something went wrong", err });
   }
 }
+
+
+export async function getAllMatches(req,res, next){
+  try{
+    const matches = await prisma.match.findMany();
+    return res.status(200).json({matches});
+  }catch(err){
+    return res.status(500).json({error: "Something went wrong", err});
+  }
+}

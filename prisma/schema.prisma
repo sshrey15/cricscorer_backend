@@ -54,6 +54,7 @@ model Match{
   team1 Team @relation("Team1ToMatch", fields: [team1Id], references: [id])
   team2Id String
   team2 Team @relation("Team2ToMatch", fields: [team2Id], references: [id])
+  overs Int?
   innings Innings[]
   result Result[]
   bowlingStats BowlerStats[]

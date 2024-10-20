@@ -57,19 +57,7 @@ export async function addTeams(req, res, next) {
 
 export async function getTeams(req, res, next){
     try {
-        const teams = await prisma.team.findMany({
-            select: {
-                id: true,
-                name: true,
-                roomId: true,
-                roompassword: true,
-                
-            },
-            include: {
-                players: true, // This line includes the related players
-            },
-            
-        })
+        const teams = await prisma.team.findMany()
         return res.status(200).json({ teams });
     } catch (err) {
         next(err);
