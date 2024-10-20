@@ -20,6 +20,7 @@ export async function createMatch(req, res,next) {
         roomId: team1RoomId,
       },
     });
+    console.log("team1_mkc", team1)
     if (!team1 || team1.roompassword !== team1Password) {
       console.log("Team1 not found with roomID: ", team1RoomId);  
       return res.status(400).json({ error: "Invalid team1 credentials" });
@@ -32,6 +33,7 @@ export async function createMatch(req, res,next) {
     if (!team2 || team2.roompassword !== team2Password) {
       return res.status(400).json({ error: "Invalid team2 credentials" });
     }
+    
     const match = await prisma.match.create({
       data: {
         team1Id: team1.id,
@@ -58,7 +60,6 @@ export async function createMatch(req, res,next) {
     return res.status(500).json({ error: "Something went wrong", err });
   }
 }
-
 
 export async function getAllMatches(req,res, next){
   try{

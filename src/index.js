@@ -8,7 +8,6 @@ import inningsRouter from "./routes/innings.js";
 import scoreboardRouter from "./routes/scoreboard.js";
 
 
-
 const port = 8000;
 
 const app = express();
@@ -29,7 +28,9 @@ app.use("/api/v1/innings", inningsRouter);
 app.use("/api/v1/scorer_auth", scorerAuthRouter); // scorer_authentication
 app.use("/api/v1/player_auth", playerAuthRouter);
 
+
 app.use("/api/v1", scoreboardRouter);
+
 
 
 
