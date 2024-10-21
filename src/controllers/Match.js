@@ -79,7 +79,9 @@ export async function getAllMatches(req, res, next) {
             totalRuns: true,
             createdAt: true
           }
-        }
+        },
+        
+        
       }
     });
     return res.status(200).json({ matches });
